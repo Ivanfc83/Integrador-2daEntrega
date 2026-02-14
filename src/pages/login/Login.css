@@ -1,0 +1,93 @@
+/* ===============================
+   LOGIN
+================================ */
+
+.login-main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 40px 20px;
+  background-color: #fff;
+}
+
+/* La tarjeta del login */
+.login-card {
+  background-color: #000;
+  color: #fff;
+  padding: 40px;
+  width: 100%;
+  max-width: 450px; /* Para evitar que se vea muy grande en pantallas grandes */
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  font-family: 'Quicksand', sans-serif;
+}
+
+.login-card h2 {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Inputs */
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #fff;
+  background: #fff;
+  color: #000;
+  border-radius: 0;
+}
+
+/* Botón Ingresar */
+.btn-ingresar {
+  width: 100%;
+  padding: 15px;
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.btn-ingresar:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Texto de abajo */
+.bottom-text {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.bottom-text a {
+  color: #fff;
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.error-message {
+  color: #f64504; /* El naranja de advertencia que venimos usando */
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 5px;
+  text-transform: none; /* Para que sea más legible */
+}

@@ -1,0 +1,256 @@
+/* ===============================
+  FOOTER - MOBILE FIRST
+================================ */
+
+.main-footer {
+  background-color: #000;
+  color: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0;
+  gap: 2rem;
+  font-family: Quicksand, sans-serif;
+}
+
+/* ===============================
+   TÍTULOS DE SECCIONES
+================================ */
+
+.main-footer h4 {
+  margin-bottom: 1rem;
+  font-size: 0.9rem !important;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+}
+
+/* ===============================
+   REDES SOCIALES
+================================ */
+
+.footer-social {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.social-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.social-list a {
+  color: #fff;
+  font-size: 1rem;
+  transition: opacity 0.2s ease;
+}
+
+.social-list a:hover {
+  opacity: 0.6;
+}
+
+/* ===============================
+   INFORMACIÓN Y ACERCA DE
+================================ */
+
+.footer-info,
+.footer-about {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.footer-info a,
+.footer-about a,
+.footer-info p {
+  text-decoration: none;
+  color: #cfcfd1;
+  font-size: 0.8rem !important;
+  line-height: 1.4;
+  transition: color 0.2s ease;
+  margin: 0;
+}
+
+.footer-info a:hover,
+.footer-about a:hover {
+  color: #fff;
+}
+
+/* ===============================
+   BRAND / LOGO
+================================ */
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.8rem;
+}
+
+.brand-logo img {
+  width: 60px;
+  height: 60px;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.footer-brand p {
+  font-size: 0.75rem;
+  color: #cfcfd1;
+  margin: 0;
+}
+
+/* ===============================
+  RESPONSIVE: TABLET (768px+)
+  MANTENER COLUMNA CENTRADA
+================================ */
+
+@media (min-width: 768px) {
+  .main-footer {
+    padding: 1rem 1rem;
+    gap: 2.5rem;
+  }
+
+  .main-footer h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .social-list {
+    gap: 2rem;
+    margin-top: 0.8rem;
+    justify-content: center;
+  }
+
+  .social-list a {
+    font-size: 2rem;
+  }
+
+  .footer-info,
+  .footer-about {
+    gap: 1rem;
+  }
+
+  .footer-info a,
+  .footer-about a,
+  .footer-info p {
+    font-size: 0.95rem;
+  }
+
+  .brand-logo img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .footer-brand p {
+    font-size: 0.8rem;
+  }
+}
+
+/* ===============================
+  RESPONSIVE: DESKTOP (992px+)
+  LAYOUT HORIZONTAL
+================================ */
+
+@media (min-width: 992px) {
+  .main-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+    padding: 1.5rem 5%;
+    gap: 2rem;
+    width: 100vw;
+    margin: 0;
+  }
+
+  /* Redes sociales: alineado a la izquierda */
+  .footer-social {
+    align-items: center;
+    text-align: center;
+    flex: 1;
+
+  }
+
+  .social-list {
+    justify-content: center;
+  }
+
+  /* Información: centrado */
+  .footer-info {
+    align-items: flex-start;
+    text-align: left;
+    flex: 1;
+  }
+
+  /* Acerca de: centrado */
+  .footer-about {
+    align-items: flex-start;
+    text-align: left;
+    flex: 1;
+  }
+
+  /* Brand: alineado a la derecha */
+  .footer-brand {
+    align-items: center;
+    text-align: center;
+    flex: 1;
+  }
+}
+
+/* ===============================
+  RESPONSIVE: LARGE DESKTOP (1400px+)
+================================ */
+
+@media (min-width: 1400px) {
+  .main-footer {
+    padding: 4rem 10%;
+    gap: 4rem;
+  }
+
+  .main-footer h4 {
+    font-size: 1.15rem;
+  }
+
+  .footer-social .social-list a {
+    font-size: 1.8rem;
+    justify-content: center;
+    align-items: center !important
+  }
+
+  .footer-social {
+    align-items: flex-start;
+    text-align: start;
+    flex: 1;
+  }
+
+  .footer-info a,
+  .footer-about a,
+  .footer-info p {
+    font-size: 1rem;
+  }
+}
+
+/* ===============================
+  FIX PARA FOOTER FULL WIDTH
+================================ */
+
+@media (min-width: 992px) and (max-width: 1180px) {
+  .main-footer {
+    padding-left: 3%;
+    padding-right: 3%;
+  }
+}

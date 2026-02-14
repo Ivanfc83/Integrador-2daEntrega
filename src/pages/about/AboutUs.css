@@ -1,0 +1,276 @@
+/* ===============================
+  ABOUT US - MOBILE FIRST
+================================ */
+
+/* ===============================
+  TÍTULO
+================================ */
+
+.title-about-us {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.title-about-us h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+/* ===============================
+  CONTENEDOR PRINCIPAL - MOBILE
+================================ */
+
+.about-us-container {
+  width: 95%;
+  max-width: 100%;
+  background-color: #ECEFF1;
+  margin: 1rem auto 6rem; /* Margen inferior para las cajas */
+  padding: 1.5rem 1rem 4rem;
+  border-radius: 0;
+  position: relative;
+}
+
+/* ===============================
+   IMAGEN + TEXTO - MOBILE
+================================ */
+
+.about-us-container img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  display: block;
+  margin: 0 auto 1.5rem;
+  border-radius: 0;
+}
+
+.about-us-container p {
+  margin: 0;
+  padding: 0;
+  text-align: justify;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* ===============================
+  CAJAS DE INFORMACIÓN - MOBILE
+  Scroll horizontal
+  SUPERPUESTAS sobre el contenedor
+================================ */
+
+.box-container {
+  display: flex;
+  gap: 0.8rem;
+  position: absolute;
+  bottom: -3rem; /* Se superpone hacia abajo */
+  left: 0;
+  right: 0;
+  padding: 0 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ocultar scrollbar */
+.box-container::-webkit-scrollbar {
+  display: none;
+}
+
+.box-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Estilo de cada caja */
+.box-one,
+.box-two,
+.box-three {
+  background: #fff;
+  color: #0f0f0f;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  min-width: 160px;
+  max-width: 160px;
+  min-height: 90px;
+  padding: 1.25rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.box-one:hover,
+.box-two:hover,
+.box-three:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+/* Texto dentro de las cajas */
+.box-one p,
+.box-two p,
+.box-three p {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin: 0;
+  color: #0f0f0f;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ===============================
+  RESPONSIVE: TABLET (768px+)
+================================ */
+
+@media (min-width: 768px) {
+  .title-about-us h2 {
+    font-size: 1.8rem;
+  }
+
+  .about-us-container {
+    width: 90%;
+    padding: 2rem 2rem 5rem;
+    margin-bottom: 7rem;
+  }
+
+  .about-us-container img {
+    float: left;
+    max-width: 250px;
+    margin: 0 1.5rem 1rem 0;
+  }
+
+  .about-us-container p {
+    font-size: 0.95rem;
+  }
+
+  /* Las cajas sin scroll, centradas */
+  .box-container {
+    bottom: -4rem;
+    padding: 0 2rem;
+    overflow-x: visible;
+    justify-content: center;
+    gap: 1.2rem;
+  }
+
+  .box-one,
+  .box-two,
+  .box-three {
+    min-width: 180px;
+    max-width: 180px;
+    min-height: 100px;
+    padding: 1.5rem 1.2rem;
+  }
+
+  .box-one p,
+  .box-two p,
+  .box-three p {
+    font-size: 0.85rem;
+  }
+}
+
+/* ===============================
+  RESPONSIVE: DESKTOP (1024px+)
+================================ */
+
+@media (min-width: 1024px) {
+  .title-about-us {
+    padding: 2rem 1rem;
+  }
+
+  .title-about-us h2 {
+    font-size: 2rem;
+  }
+
+  .about-us-container {
+    width: 80%;
+    max-width: 1200px;
+    padding: 2.5rem 3rem 6rem;
+    margin-bottom: 8rem;
+  }
+
+  .about-us-container img {
+    max-width: 300px;
+    margin: 0 2rem 1.5rem 0;
+  }
+
+  .about-us-container p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* Las 3 cajas en línea, superpuestas */
+  .box-container {
+    bottom: -5rem;
+    padding: 0 13.6875rem; 
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .box-one,
+  .box-two,
+  .box-three {
+    min-width: 200px;
+    max-width: 240px;
+    min-height: 110px;
+    flex: 0 1 auto;
+    padding: 1.8rem 1.5rem;
+  }
+
+  .box-one p,
+  .box-two p,
+  .box-three p {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+}
+
+/* ===============================
+   RESPONSIVE: LARGE DESKTOP (1400px+)
+================================ */
+
+@media (min-width: 1400px) {
+  .about-us-container {
+    width: 75%;
+    max-width: 1400px;
+    padding: 3rem 4rem 6rem;
+  }
+
+  .about-us-container img {
+    max-width: 350px;
+    margin: 0 2.5rem 1.5rem 0;
+  }
+
+  .about-us-container p {
+    font-size: 1.05rem;
+  }
+
+  .box-container {
+    bottom: -5.5rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 2rem;
+  }
+
+  .box-one,
+  .box-two,
+  .box-three {
+    min-width: 220px;
+    max-width: 260px;
+    min-height: 120px;
+    padding: 2rem 1.8rem;
+  }
+
+  .box-one p,
+  .box-two p,
+  .box-three p {
+    font-size: 0.9rem;
+  }
+}

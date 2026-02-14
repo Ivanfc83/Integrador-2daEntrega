@@ -1,0 +1,40 @@
+/* ===============================
+   PÁGINA PRODUCTS
+================================ */
+
+.product-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.products-header {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.products-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.products-header p {
+  font-size: 1rem;
+  color: #767677;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.loading-container p {
+  font-size: 1.2rem;
+  color: #767677;
+}

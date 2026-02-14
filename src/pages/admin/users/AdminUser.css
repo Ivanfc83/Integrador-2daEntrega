@@ -1,0 +1,145 @@
+/* ===============================
+  PÁGINA ADMIN USUARIOS
+================================ */
+
+.admin-users-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 1.5rem 0;
+  background-color: #fff;
+}
+
+/* TÍTULO */
+.title-users {
+  text-align: center;
+  margin: 1.5rem 0;
+  padding: 1rem;
+}
+
+.title-users h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #000;
+  font-family: 'Quicksand', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* CONTENEDOR DE LA TABLA */
+.admin-users-container {
+  padding: 0 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.admin-users-page {
+  padding-bottom: 3rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid #ECEFF1;
+  background: #fff;
+}
+
+.table {
+  width: 100%;
+  min-width: 900px; /* Más ancha por los datos de usuario */
+  border-collapse: collapse;
+  font-family: 'Quicksand', sans-serif;
+}
+
+/* CABECERA NEGRA */
+.table thead th {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 1.2rem 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* CELDAS */
+.table tbody td {
+  vertical-align: middle;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid #ECEFF1;
+  color: #000;
+  text-align: center;
+}
+
+/* FILAS ALTERNADAS */
+.table tbody tr:nth-child(even) { background-color: #FAFAFA; }
+.table tbody tr:hover { background-color: #ECEFF1; }
+
+/* ===============================
+  COLUMNAS ESPECÍFICAS USUARIOS
+================================ */
+
+.imagen-user-cell {
+  width: 80px;
+}
+
+.imagen-user-cell img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border: 1px solid #ECEFF1;
+  border-radius: 50%; /* Avatar para personas */
+}
+
+.name-user-cell {
+  font-weight: 700;
+  color: #000;
+}
+
+.email-user-cell {
+  color: #767677;
+  font-size: 0.9rem;
+}
+
+.country-user-cell {
+  text-transform: capitalize;
+}
+
+.date-user-cell {
+  font-size: 0.85rem;
+  color: #767677;
+}
+
+/* BOTONES DE ACCIÓN */
+.buttons-user-cell {
+  width: 80px;
+}
+
+.action-user-cell {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-two {
+  width: 40px;
+  height: 40px;
+  background-color: #767677;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-two:hover {
+  background-color: #f64504; /* Naranja de alerta al eliminar */
+  transform: translateY(-2px);
+}
+
+/* RESPONSIVE */
+@media (min-width: 768px) {
+  .admin-users-container { padding: 0 2rem; }
+  .title-users h2 { font-size: 2rem; }
+  .table thead th { font-size: 0.95rem; }
+}

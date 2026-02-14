@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&family=Quicksand:wght@300..700&family=Rajdhani:wght@300;400;500;600;700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* ===============================
+   STYLES - GLOBAL
+================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Quicksand, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: visible;
+  background-color: #fff;
+}
+
+#root {
+  min-height: 100vh !important;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+body, #root {
+  overflow-x: hidden;
+}
+
+.main-container {
+  width: 100%;
+  flex: 1;
+  padding-top: 80px;
+}
+
+/* ===============================
+   BANNER - MOBILE
+================================ */
+
+.banner-container {
+  width: 100%;
+  padding: 1.5rem 1rem;
+}
+
+.main-text-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.image-home img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  object-fit: cover;
+}
+
+.text-home {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+/* ===============================
+   CARDS DE PRODUCTOS - MOBILE
+================================ */
+
+.product-title {
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin: 2rem 1rem 1rem;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+
+/* ===============================
+   FOOTER - MOBILE
+================================ */
+
+.main-pie-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  background-color: #FAFAFA;
+}
+
+.main-pie-one,
+.main-pie-two,
+.main-pie-three {
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+  padding: 2rem;
+  width: 100%;
+  max-width: 350px;
+}
+
+.main-footer {
+  min-width: 100%;
+}
+
+/* ===============================
+   RESPONSIVE: TABLET (768px+)
+================================ */
+
+@media (min-width: 768px) {
+  .banner-container {
+    padding: 2rem;
+  }
+
+  .main-text-image {
+    flex-direction: row;
+    text-align: left;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .image-home img {
+    width: 260px;
+    height: 350px;
+  }
+
+  .text-home {
+    max-width: 500px;
+  }
+
+  .product-title {
+    font-size: 1.5rem;
+    margin: 2rem 2rem 1.5rem;
+  }
+
+
+  .main-pie-container {
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 1.5rem 2rem;
+  }
+
+  .main-pie-one,
+  .main-pie-two,
+  .main-pie-three {
+    width: auto;
+    max-width: none;
+    padding: 2.5rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE: DESKTOP (992px+)
+================================ */
+
+@media (min-width: 992px) {
+
+  .main-container {
+    padding-top: 90px;
+  }
+
+  .banner-container {
+    padding: 3rem;
+  }
+
+  .main-text-image {
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 3rem;
+  }
+
+  .product-title {
+    font-size: 1.8rem;
+    margin: 3rem 4rem 2rem;
+  }
+
+
+  .main-pie-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+/* ===============================
+  SWAL SWEETALERT2
+================================ */
+
+
+/* Fix z-index de SweetAlert2 */
+.swal-container-custom {
+  z-index: 9999 !important;
+}
+
+.swal2-container {
+  z-index: 9999 !important;
+}

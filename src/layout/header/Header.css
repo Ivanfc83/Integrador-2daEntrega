@@ -1,0 +1,223 @@
+/* ===============================
+  HEADER / NAVBAR - MOBILE FIRST
+================================ */
+
+.main-header {
+  background-color: #fff;
+  border-bottom: 1px solid #ECEFF1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: block;
+}
+
+/* ===============================
+  CONTENEDOR DEL HEADER - MOBILE
+================================ */
+
+.container-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 1rem;
+  min-height: 60px;
+}
+
+/* ===============================
+  LOGO
+================================ */
+
+.header-logo {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #000;
+  transition: opacity 0.2s ease;
+}
+
+.header-logo a:hover {
+  opacity: 0.7;
+}
+
+.header-logo img {
+  width: 35px;
+  height: 35px;
+  border-radius: 0;
+  margin-right: 0.6rem;
+}
+
+.brand-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===============================
+  MENÚ DE NAVEGACIÓN - MOBILE
+================================ */
+
+.navbar-collapse {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  background: #000;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.navbar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 0;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-link:last-child {
+  border-bottom: none;
+}
+
+.nav-link:hover {
+  background-color: #333;
+  padding-left: 1.5rem;
+}
+
+/* ===============================
+  ÍCONOS DE USUARIO
+================================ */
+
+.header-icons {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.header-icons a {
+  color: #000;
+  transition: opacity 0.2s ease;
+}
+
+.header-icons a:hover {
+  opacity: 0.6;
+}
+
+/* ===============================
+  RESPONSIVE: TABLET (768px+)
+================================ */
+
+@media (min-width: 768px) {
+  .container-header {
+    padding: 0 2rem;
+    min-height: 70px;
+  }
+
+  .header-logo img {
+    width: 40px;
+    height: 40px;
+    margin-right: 0.8rem;
+  }
+
+  .brand-name {
+    font-size: 1.3rem;
+  }
+
+  .navbar-collapse {
+    top: 70px;
+  }
+
+  .header-icons {
+    gap: 1.2rem;
+  }
+}
+
+/* ===============================
+  RESPONSIVE: DESKTOP (992px+)
+================================ */
+
+@media (min-width: 992px) {
+  .container-header {
+    justify-content: flex-start;
+    padding: 0 3rem;
+  }
+
+  .header-logo {
+    margin-right: 3rem;
+  }
+
+  /* Menú en línea */
+  .navbar-collapse {
+    position: static;
+    width: auto;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .navbar-nav {
+    flex-direction: row;
+    gap: 2.5rem;
+    padding: 0;
+  }
+
+  .nav-link {
+    padding: 0;
+    border-bottom: none;
+    color: #000;
+    font-size: 0.9rem;
+  }
+
+  .nav-link:hover {
+    background-color: transparent;
+    opacity: 0.6;
+    padding-left: 0;
+  }
+
+  /* Íconos a la derecha */
+  .header-icons {
+    margin-left: auto;
+    gap: 1.5rem;
+  }
+}
+
+/* ==================================
+  ESTILOS ADMINISTRAR PRODUCTS/USERS
+================================== */
+
+
+/* Esto hace que el menú aparezca cuando se pasa el mouse por el LI padre */
+.admin-dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0; /* Evita que haya un hueco y se cierre al bajar el mouse */
+}
+
+/* Opcional: un poquito de estilo para que se vea más prolijo */
+.admin-dropdown .nav-link {
+  cursor: default;
+}
+
+.dropdown-item:hover {
+  background-color: #1b1a1b; /* El color de tu marca */
+  color: white;
+}
