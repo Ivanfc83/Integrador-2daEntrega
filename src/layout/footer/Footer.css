@@ -171,7 +171,7 @@
     justify-content: space-between;
     align-items: flex-start;
     text-align: left;
-    padding: 1.5rem 5%;
+    padding: 1.2rem 5%;
     gap: 2rem;
     width: 100vw;
     margin: 0;
@@ -217,16 +217,16 @@
 
 @media (min-width: 1400px) {
   .main-footer {
-    padding: 4rem 10%;
-    gap: 4rem;
+    padding: 1.5rem 10%;
+    gap: 3rem;
   }
 
   .main-footer h4 {
-    font-size: 1.15rem;
+    font-size: 1rem;
   }
 
   .footer-social .social-list a {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     justify-content: center;
     align-items: center !important
   }
@@ -240,7 +240,7 @@
   .footer-info a,
   .footer-about a,
   .footer-info p {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 }
 

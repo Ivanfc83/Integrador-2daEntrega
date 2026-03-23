@@ -3,6 +3,8 @@ import "./Contact.css";
 import ShowSwalToast from "../../config/Swal.fire";
 
 function Contact() {
+
+  // Estado con los campos del formulario de contacto
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
@@ -10,43 +12,35 @@ function Contact() {
     message: "",
   });
 
+  // Actualizo el campo que el usuario está escribiendo
   function handleChange(e) {
     const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   }
 
+  // Al enviar el formulario muestro un mensaje de confirmación
+  // y limpio los campos para el próximo mensaje
   function handleSubmit(e) {
     e.preventDefault();
 
-    try {
-      ShowSwalToast(
-        "Enviado",
-        "Gracias por contactarnos, te responderemos pronto",
-      );
+    // Por ahora no hay backend para el formulario de contacto,
+    // pero cuando se conecte se haría el api.post acá
+    ShowSwalToast("Enviado", "Gracias por contactarnos, te responderemos pronto");
 
-      setFormData({ fullname: "", email: "", subject: "", message: "" });
-
-    } catch (error) {
-      console.log(error);
-
-      ShowSwalToast("Error", "No se pudo realizar el envío", "error");
-    }
+    setFormData({ fullname: "", email: "", subject: "", message: "" });
   }
 
   return (
     <>
       <main className="form-container">
-      
-        {/* Contenedor que centra todo */}
+
+        {/* Formulario centrado con el mismo estilo que login y registro */}
         <section className="register-form contact-form">
           <h2>Contacto</h2>
 
           <form onSubmit={handleSubmit} className="contact-form-container">
-            {/* NOMBRE */}
+
+            {/* Nombre del remitente */}
             <div className="mb-3">
               <label htmlFor="name" className="form-label">
                 Nombre
@@ -63,7 +57,7 @@ function Contact() {
               />
             </div>
 
-            {/* EMAIL */}
+            {/* Email para responderle */}
             <div className="mb-3">
               <label htmlFor="email" className="form-label">
                 Email
@@ -80,7 +74,7 @@ function Contact() {
               />
             </div>
 
-            {/* ASUNTO */}
+            {/* Asunto del mensaje */}
             <div className="mb-3">
               <label htmlFor="subject" className="form-label">
                 Asunto
@@ -97,7 +91,7 @@ function Contact() {
               />
             </div>
 
-            {/* MENSAJE */}
+            {/* Mensaje principal */}
             <div className="mb-3">
               <label htmlFor="message" className="form-label">
                 Descripción
@@ -108,11 +102,11 @@ function Contact() {
                 value={formData.message}
                 className="form-control"
                 onChange={handleChange}
-                rows={6}
+                rows={4}
                 required
               ></textarea>
 
-              <button type="submit" className="btn btn-dark w-100">
+              <button type="submit" className="btn btn-dark w-100 mt-2">
                 Enviar mensaje
               </button>
             </div>

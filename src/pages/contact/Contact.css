@@ -3,19 +3,18 @@
 ================================ */
 
 .form-container {
-  margin: 1.5rem 1rem;
+  margin: 2rem 1rem;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Para que no se pegue al techo */
-  min-height: 80vh;
+  align-items: flex-start;
 }
 
-/* Formulario de contacto  más ancho */
+/* Mismo ancho que el formulario de registro */
 .contact-form {
   background-color: #000;
-  padding: 2.5rem;
+  padding: 2rem;
   width: 100%;
-  max-width: 650px;
+  max-width: 460px;       /* igual que register/login */
   font-family: 'Quicksand', sans-serif;
   color: #fff;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
@@ -23,9 +22,10 @@
 
 .contact-form h2 {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   text-transform: uppercase;
   letter-spacing: 2px;
+  font-size: 1.3rem;
 }
 
 /* Estilo del textarea */
@@ -34,11 +34,11 @@
   padding: 0.8rem;
   width: 100%;
   border: 1px solid #767677;
-  font-size: 1rem;
+  font-size: 0.95rem;
   background-color: #fff;
   color: #000;
   border-radius: 0;
-  resize: none; /* Para evitar que el usuario lo deforme */
+  resize: none;
   transition: all 0.2s ease;
   font-family: inherit;
 }
@@ -49,17 +49,18 @@
   box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
 }
 
-
 .contact-form button {
   background-color: #000;
   border: 2px solid #fff;
   color: #fff;
-  padding: 1rem;
+  padding: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 1px;
   width: 100%;
   cursor: pointer;
   transition: 0.3s;
+  margin-top: 0.5rem;
 }
 
 .contact-form button:hover {
@@ -67,7 +68,7 @@
   color: #000;
 }
 
-/* Ajuste Mobile */
+/* Mobile */
 @media (max-width: 768px) {
   .contact-form {
     max-width: 100%;

@@ -1,56 +1,60 @@
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormartISODateToLocal } from "../../utils/FormatDate";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { FILES } from "../../config/env.config";
 
+// Fila de la tabla de productos en el panel de administración
+// Recibe el producto y las funciones para editar y borrar
 function TableProductRow({ product, deleteProduct, setEditProduct }) {
-
-
 
   return (
     <>
-      <tr key={product.id}>
-        {/* Imagen */}
+      <tr>
+        {/* Imagen clickeable que lleva al detalle del producto */}
         <td className="imagen-icon">
-
-          <NavLink to={`/product/${product.id}`} className='product-link'>
-          <img src={product.image} alt={product.name} style={{ cursor: 'pointer' }}/>
+          <NavLink to={`/product/${product._id}`} className="product-link">
+            <img
+              src={`${FILES}/products/${product.image}`}
+              alt={product.name}
+              style={{ cursor: "pointer" }}
+            />
           </NavLink>
-
         </td>
 
-        {/* Nombre */}
+        {/* Nombre del producto */}
         <td className="name-cell">{product.name}</td>
 
-        {/* Descripción */}
+        {/* Descripción — en el CSS se corta con puntos suspensivos si es muy larga */}
         <td className="description-cell">
           <p className="text-clamp">{product.description}</p>
         </td>
 
-        {/* Fecha */}
+        {/* Fecha formateada con la función de utils */}
         <td className="date-cell">
-          { FormartISODateToLocal(product.createdAt) }
+          {FormartISODateToLocal(product.createdAt)}
         </td>
 
-        {/* Precio */}
-        <td className="price-cell"> {product.price} </td>
+        {/* Precio del producto */}
+        <td className="price-cell">{product.price}</td>
 
-        {/* Botones */}
+        {/* Botones de acciones: editar y eliminar */}
         <td className="buttons-cell">
-          <div className="action-button" title="Editar">
-            {/* Botón Editar */}
+          <div className="action-button">
+
+            {/* Al clickear editar, cargo este producto en el formulario */}
             <button
-            className="btn btn-one"
-            onClick={() => setEditProduct(product)}
-            title="Editar"
+              className="btn btn-one"
+              onClick={() => setEditProduct(product)}
+              title="Editar"
             >
               <FontAwesomeIcon icon={faPen} />
             </button>
 
-            {/* Botón Eliminar */}
+            {/* Al clickear borrar, llamo a la función que confirma antes de eliminar */}
             <button
               className="btn btn-two"
-              onClick={() => deleteProduct(product.id, product.name)}
+              onClick={() => deleteProduct(product._id, product.name)}
               title="Eliminar"
             >
               <FontAwesomeIcon icon={faTrash} />

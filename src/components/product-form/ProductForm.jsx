@@ -1,12 +1,13 @@
-import axios from "axios";
-import { useEffect } from "react";
-import Swal from "sweetalert2";
-import { API } from "../../config/env.config";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import "./ProductForm.css"
+import "./ProductForm.css";
 import ShowSwalToast from "../../config/Swal.fire";
+import api from "../../config/api.config";
 
-function ProductForm({ getProducts, editProduct, setEditProduct }) {
+// Formulario para que el admin cargue o edite un producto
+// Si recibe el prop editProduct significa que estamos en modo edición
+function ProductForm({ getProducts, editProduct, setEditProduct, categories }) {
+
   const {
     handleSubmit,
     register,
@@ -15,62 +16,103 @@ function ProductForm({ getProducts, editProduct, setEditProduct }) {
     formState: { errors },
   } = useForm();
 
+  // Guardo las previsualizaciones de las imágenes que elige el admin
+  const [imagePreviews, setImagePreviews] = useState([]);
+
+  // Cuando el admin selecciona archivos, genero las URLs de previsualización
+  function handleImagesChange(e) {
+    const files = Array.from(e.target.files).slice(0, 4);
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews(previews);
+  }
+
+  // Manejo el envío del formulario — puede ser creación o edición
   async function submitProduct(product) {
     try {
+      // Armo el FormData para poder enviar archivos junto con los datos de texto
+      const formData = new FormData();
+      formData.append("name", product.name);
+      formData.append("price", product.price);
+      if (product.oldPrice) formData.append("oldPrice", product.oldPrice);
+      formData.append("category", product.category);
+      formData.append("gender", product.gender);
+      formData.append("sportType", product.sportType);
+      formData.append("description", product.description);
+
+      // Agrego las imágenes con sus nombres correspondientes (image1, image2, etc.)
+      const imageKeys = ["image1", "image2", "image3", "image4"];
+      const files = product.images ? Array.from(product.images) : [];
+      files.slice(0, 4).forEach((file, i) => {
+        formData.append(imageKeys[i], file);
+      });
+
       if (editProduct) {
-
-        const { id } = editProduct;
-        await axios.put(`${API}/products/${id}`, product);
-
-        ShowSwalToast("Producto actualizado", `El producto ${product.name} fue actualizado correctamente`)
-
+        // Si hay un producto a editar, hago PUT con el ID
+        const { _id } = editProduct;
+        await api.put(`/products/${_id}`, formData);
+        ShowSwalToast(
+          "Producto actualizado",
+          `El producto ${product.name} fue actualizado correctamente`
+        );
         setEditProduct(null);
       } else {
-
-
-        product.createdAt = new Date().toISOString();
-
-        const response = await axios.post(`${API}/products`, product);
-
-        ShowSwalToast('Producto creado', `El producto ${response.data.name} se creó correctamente`);
-
+        // Si es un producto nuevo, agrego la fecha y hago POST
+        formData.append("createdAt", new Date().toISOString());
+        const response = await api.post(`/products`, formData);
+        ShowSwalToast(
+          "Producto creado",
+          `El producto ${response.data.name} se creó correctamente`
+        );
       }
 
+      // Limpio el formulario y las previsualizaciones
       reset();
+      setImagePreviews([]);
+      if (getProducts) getProducts();
 
-      if (getProducts) {
-        getProducts();
-      }
     } catch (error) {
-      console.log(error);
-      ShowSwalToast("Error", "No se pudo crear el producto.", "error")
+      const mensaje =
+        error?.response?.data?.message || "Revisá los campos e intentá de nuevo";
+      ShowSwalToast("Error", mensaje, "error");
     }
   }
 
+  // Cuando el admin elige un producto para editar, cargo sus datos en el formulario
   useEffect(() => {
-
     if (editProduct) {
-
       setValue("name", editProduct.name);
       setValue("price", editProduct.price);
       setValue("oldPrice", editProduct.oldPrice);
-      setValue("category", editProduct.category);
+      // La categoría puede venir como objeto o como string, manejo los dos casos
+      setValue("category", editProduct.category?._id || editProduct.category);
       setValue("gender", editProduct.gender);
       setValue("sportType", editProduct.sportType);
       setValue("description", editProduct.description);
-      setValue("image", editProduct.image);
-      setValue("image2", editProduct.image2);
-      setValue("image3", editProduct.image3);
-      setValue("image4", editProduct.image4);
+
+      // Muestro las imágenes actuales del producto como previsualizaciones
+      const existing = [
+        editProduct.image,
+        editProduct.image2,
+        editProduct.image3,
+        editProduct.image4,
+      ].filter(Boolean);
+
+      setImagePreviews(existing);
+      
     } else {
+      // Si se cancela la edición, limpio todo
       reset();
+      setImagePreviews([]);
     }
   }, [editProduct, setValue, reset]);
 
   return (
     <>
-      <form onSubmit={handleSubmit(submitProduct)} className="admin-product-form">
-        {/* NOMBRE */}
+      <form
+        onSubmit={handleSubmit(submitProduct)}
+        className="admin-product-form"
+      >
+        {/* Nombre del producto */}
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Nombre Producto
@@ -78,10 +120,7 @@ function ProductForm({ getProducts, editProduct, setEditProduct }) {
           <input
             type="text"
             {...register("name", {
-              minLength: {
-                value: 2,
-                message: "El nombre debe tener al menos 2 caracteres",
-              },
+              minLength: { value: 2, message: "Mínimo 2 caracteres" },
               required: { value: true, message: "El nombre es obligatorio" },
             })}
             className="form-control"
@@ -92,23 +131,22 @@ function ProductForm({ getProducts, editProduct, setEditProduct }) {
           )}
         </div>
 
-        {/* PRECIO */}
+        {/* Precio actual */}
         <div className="mb-3">
           <label htmlFor="price" className="form-label">
             Precio
           </label>
           <input
             type="number"
-            {...register("price")}
+            {...register("price", { required: true })}
             className="form-control"
             id="price"
-            required
             min={0}
             step={0.01}
           />
         </div>
 
-        {/* PRECIO ANTERIOR (OPCIONAL) */}
+        {/* Precio tachado (descuento) — es opcional */}
         <div className="mb-3">
           <label htmlFor="oldPrice" className="form-label">
             Precio Anterior
@@ -124,36 +162,34 @@ function ProductForm({ getProducts, editProduct, setEditProduct }) {
           />
         </div>
 
-        {/* CATEGORÍA */}
+        {/* Categoría del producto */}
         <div className="mb-3">
           <label htmlFor="category" className="form-label">
             Categoría
           </label>
           <select
-            {...register("category")}
+            {...register("category", { required: true })}
             id="category"
             className="form-select"
-            required
           >
             <option value="">Seleccionar</option>
-            <option value="destacados">Destacados</option>
-            <option value="ofertas">Ofertas</option>
-            <option value="calzado">Calzado</option>
-            <option value="indumentaria">Indumentaria</option>
-            <option value="accesorios">Accesorios</option>
+            {categories.map((cat) => (
+              <option key={cat._id} value={cat._id}>
+                {cat.name}
+              </option>
+            ))}
           </select>
         </div>
 
-        {/* GÉNERO */}
+        {/* Género al que va dirigido el producto */}
         <div className="mb-3">
           <label htmlFor="gender" className="form-label">
             Género
           </label>
           <select
-            {...register("gender")}
+            {...register("gender", { required: true })}
             id="gender"
             className="form-select"
-            required
           >
             <option value="">Seleccionar</option>
             <option value="hombre">Hombre</option>
@@ -164,16 +200,15 @@ function ProductForm({ getProducts, editProduct, setEditProduct }) {
           </select>
         </div>
 
-        {/* TIPO DE DEPORTE */}
+        {/* Deporte relacionado al producto */}
         <div className="mb-3">
           <label htmlFor="sportType" className="form-label">
             Tipo de Deporte
           </label>
           <select
-            {...register("sportType")}
+            {...register("sportType", { required: true })}
             id="sportType"
             className="form-select"
-            required
           >
             <option value="">Seleccionar</option>
             <option value="running">Running</option>
@@ -188,92 +223,68 @@ function ProductForm({ getProducts, editProduct, setEditProduct }) {
           </select>
         </div>
 
-        {/* DESCRIPCIÓN */}
+        {/* Descripción del producto */}
         <div className="mb-3">
           <label htmlFor="description" className="form-label">
             Descripción
           </label>
           <textarea
-            {...register("description")}
+            {...register("description", { required: true })}
             className="form-control"
             id="description"
             rows={4}
-            required
           ></textarea>
         </div>
 
-        {/* IMAGEN PRINCIPAL */}
+        {/* Campo único para cargar hasta 4 imágenes del producto */}
         <div className="mb-3">
-          <label htmlFor="image" className="form-label">
-            Imagen Principal
+          <label htmlFor="images" className="form-label">
+            Imágenes del producto (hasta 4)
           </label>
           <input
-            type="url"
-            {...register("image")}
+            type="file"
+            {...register("images")}
             className="form-control"
-            id="image"
-            placeholder="https://example.com/image.jpg"
-            required
+            id="images"
+            multiple
+            accept="image/*"
+            onChange={handleImagesChange}
+            required={!editProduct}
           />
+          <small className="images-hint">
+            Seleccioná hasta 4 imágenes. La primera será la imagen principal.
+          </small>
+
+          {/* Previsualización de las imágenes seleccionadas */}
+          {imagePreviews.length > 0 && (
+            <div className="image-previews">
+              {imagePreviews.map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  alt={`Vista previa ${i + 1}`}
+                  className="image-preview-thumb"
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* IMAGEN 2 */}
-        <div className="mb-3">
-          <label htmlFor="image2" className="form-label">
-            Imagen 2
-          </label>
-          <input
-            type="url"
-            {...register("image2")}
-            className="form-control"
-            id="image2"
-            placeholder="https://example.com/image2.jpg"
-          />
-        </div>
-
-        {/* IMAGEN 3 */}
-        <div className="mb-3">
-          <label htmlFor="image3" className="form-label">
-            Imagen 3
-          </label>
-          <input
-            type="url"
-            {...register("image3")}
-            className="form-control"
-            id="image3"
-            placeholder="https://example.com/image3.jpg"
-          />
-        </div>
-
-        {/* IMAGEN 4 */}
-        <div className="mb-3">
-          <label htmlFor="image4" className="form-label">
-            Imagen 4
-          </label>
-          <input
-            type="url"
-            {...register("image4")}
-            className="form-control"
-            id="image4"
-            placeholder="https://example.com/image4.jpg"
-          />
-        </div>
-
+        {/* Botones de acción — el texto cambia según si es creación o edición */}
         <div className="d-flex justify-content-between">
           <button
             type="submit"
             className={`btn ${editProduct ? "btn-success" : "btn-primary"}`}
           >
-            {editProduct !== null && editProduct !== undefined ? "Actualizar" : "Cargar"} Producto
+            {editProduct ? "Actualizar" : "Cargar"} Producto
           </button>
 
+          {/* El botón cancelar solo aparece cuando se está editando */}
           {editProduct && (
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={() => {
-                console.log("❌ FORM: Cancelando edición");
-                setEditProduct(null)}}
+              onClick={() => setEditProduct(null)}
             >
               Cancelar
             </button>

@@ -1,28 +1,28 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./Register.css";
 import { Link, useNavigate } from "react-router-dom";
 import ShowSwalToast from "../../config/Swal.fire";
-import axios from "axios";
-import { API } from "../../config/env.config";
+import api from "../../config/api.config";
 
 function Register() {
+
+  // Estado con todos los campos del formulario
   const [formData, setFormData] = useState({
-    fullname: "",
+    name: "",
     email: "",
     password: "",
     repeatPassword: "",
     bornDate: "",
     country: "",
-    image:""
+    image: "",
   });
 
-  // Estado para almacenar los errores de validación
-  const [ errors, setErrors ] = useState({});
+  // Acá guardo los mensajes de error de cada campo
+  const [errors, setErrors] = useState({});
 
-  // Hook para navegar programáticamente
   const navigate = useNavigate();
 
-  // Función para manejar los cambios en los campos del formulario
+  // Actualizo el campo correspondiente cada vez que el usuario escribe
   function handleChange(e) {
     const { name, value } = e.target;
 
@@ -31,168 +31,167 @@ function Register() {
       [name]: value,
     });
 
-    // Limpia el error para el campo que se está editando
+    // Limpio el error de ese campo si ya lo había
     if (errors[name]) {
-      setErrors({
-        ...errors,
-        [name]: "", // Limpia el error para este campo
-      });
+      setErrors({ ...errors, [name]: "" });
     }
   }
 
-  //Generar avatar aleatorio por defecto
-  function generateDefaultAvatar (name, email) {
+  // Si el usuario no sube foto, genero un avatar automático con su nombre
+  function generateDefaultAvatar(name, email) {
     const seed = name || email || Date.now();
     return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;
   }
 
-  //Función para manejar la carga de imagen
+  // Manejo la carga de la foto de perfil
+  // La convierto a base64 para enviarla como texto
   function handleImageChange(e) {
     const file = e.target.files[0];
 
-    if(file){
-
-      if(!file.type.starsWith('image/')) {
+    if (file) {
+      // Solo acepto archivos de imagen
+      if (!file.type.startsWith("image/")) {
         setErrors({
           ...errors,
-          image: "Por favor selecciona un archivo de imagen válido"
+          image: "Por favor seleccioná un archivo de imagen válido",
         });
         return;
       }
 
-      // Para validar tamaño (máximo 2MB)
-      if(file > 2 * 1024 * 1024) {
-        setErrors({
-          ...errors,
-          image: "La imagen no debe superar los 2MB"
-        });
+      // El límite es 2MB para que no sea muy pesado
+      if (file.size > 2 * 1024 * 1024) {
+        setErrors({ ...errors, image: "La imagen no debe superar los 2MB" });
         return;
+      }
+
+      // Leo el archivo y lo guardo como base64 en el estado
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, image: reader.result });
+        if (errors.image) {
+          setErrors({ ...errors, image: "" });
+        }
+      };
+      reader.readAsDataURL(file);
     }
-
-    // Convertir la imagen a base 64
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData({
-        ...formData,
-        image: reader.result // Aca guarda la imagen en base 64
-      });
-
-      //Limpiar error en caso de que lo haya habido
-      if(errors.image){
-        setErrors({
-          ...errors,
-          image:""
-        });
-      }
-    };
-    reader.readAsDataURL(file);
-  }
   }
 
-   // Función para validar el formulario
+  // Valido todos los campos antes de enviar el formulario
   function validateForm() {
-    const newErrors = {}; // Objeto para almacenar los errores
+    const newErrors = {};
 
-    // Validación del nombre
-    if (formData.fullname.trim().length < 6 || formData.fullname.trim().length > 50) {
-      newErrors.fullname =
+    // El nombre tiene que tener entre 6 y 50 caracteres
+    if (
+      formData.name.trim().length < 6 ||
+      formData.name.trim().length > 50
+    ) {
+      newErrors.name =
         "El nombre completo debe tener entre 6 y 50 caracteres.";
     }
 
-    // Validación del email
-    const emailPattern = /^[A-Za-z0-9._+\-']+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/;
+    // Verifico que sea un email válido con una expresión regular
+    const emailPattern = /^[A-Za-z0-9._+'.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     if (!emailPattern.test(formData.email)) {
-      newErrors.email = "Por favor, ingresa un email válido.";
+      newErrors.email = "Por favor, ingresá un email válido.";
     }
 
-    // Validación de la contraseña
+    // La contraseña debe tener al menos 8 chars, mayúscula, minúscula y número
     const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     if (!passwordPattern.test(formData.password)) {
       newErrors.password =
-        "La contraseña debe tener al menos 8 caracteres, una letra una mayúscula, una minúscula y un número.";
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.";
     }
 
-    // Validación de la repetición de la contraseña
+    // Las dos contraseñas tienen que ser iguales
     if (formData.password !== formData.repeatPassword) {
       newErrors.repeatPassword =
-        "Las contraseñas no coinciden, por favor verifica.";
+        "Las contraseñas no coinciden, por favor verificá.";
     }
 
+    // Verifico que sea mayor de 18 años
+    // Tengo en cuenta el mes y día exacto para que no haya errores
     if (formData.bornDate) {
       const bornDate = new Date(formData.bornDate);
       const today = new Date();
-      const age = today.getFullYear() - bornDate.getFullYear();
+      let age = today.getFullYear() - bornDate.getFullYear();
+      const cumpleaniosEsteAnio = new Date(
+        today.getFullYear(),
+        bornDate.getMonth(),
+        bornDate.getDate()
+      );
+      if (today < cumpleaniosEsteAnio) age -= 1;
 
       if (age < 18) {
-        newErrors.bornDate = "Debes ser mayor de 18 años para registrarte.";
+        newErrors.bornDate = "Debés ser mayor de 18 años para registrarte.";
       }
     } else {
       newErrors.bornDate = "La fecha de nacimiento es obligatoria.";
     }
 
+    setErrors(newErrors);
 
-    setErrors(newErrors); // Actualiza el estado de errores
-
-    return Object.keys(newErrors).length === 0; // Retorna true si no hay errores
+    // Si el objeto está vacío es que no hay errores, puedo enviar
+    return Object.keys(newErrors).length === 0;
   }
 
-  // Función para manejar el envío del formulario
+  // Cuando el usuario envía el formulario, valido y mando los datos a la API
   async function handleSubmit(e) {
-    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+    e.preventDefault();
 
     if (validateForm()) {
-      // Lógica para enviar los datos al servidor o realizar otras acciones necesarias
+      try {
+        // Armo el objeto con los datos del usuario
+        // Si no subió foto, le asigno un avatar automático
+        const userData = {
+          ...formData,
+          image:
+            formData.image ||
+            generateDefaultAvatar(formData.name, formData.email),
+          createdAt: new Date().toISOString(),
+        };
 
-        try{
+        // No mando la repetición de contraseña al backend
+        delete userData.repeatPassword;
 
-          // Si no hay imagen cargada, usar avatar automático
-          const userData = {
-            ...formData,
-            image: formData.image || generateDefaultAvatar(formData.fullname, formData.email),
-            createdAt: new Date().toISOString()
-          };
+        await api.post(`/users`, userData);
 
-          // Eliminar repeatPassword
-          delete userData.repeatPassword;
+        ShowSwalToast("Usuario registrado", "Registro exitoso");
 
-          const response = await axios.post(`${API}/users`, formData);
-          console.log('Respuesta de la API', response.data);
-
-          ShowSwalToast('Usuario registrado', 'Registro exitoso')
-
-          navigate('/login');
-
-        }catch(error){
-          console.log('Error en el registro de usuario', error);
-
-          ShowSwalToast('Error', 'Error en el registro', 'error')
-
-        }
+        // Después del registro mando al login para que inicie sesión
+        navigate("/login");
+      } catch (error) {
+        const mensaje =
+          error?.response?.data?.message || "Por favor intentá nuevamente";
+        ShowSwalToast("Error en el registro", mensaje, "error");
+      }
+    }
   }
-}
 
   return (
     <>
       <main>
         <section className="form-section">
-          <form className="register-form" onSubmit={ handleSubmit }>
+          <form className="register-form" onSubmit={handleSubmit}>
             <h2>Crear una cuenta</h2>
 
+            {/* Nombre completo */}
             <div className="input-group">
               <label htmlFor="name">Nombre Completo</label>
-
               <input
                 type="text"
-                id="fullname"
-                name="fullname"
+                id="name"
+                name="name"
                 placeholder="Nombre Completo"
-                value={formData.fullname}
+                value={formData.name}
                 onChange={handleChange}
                 required
               />
-              {errors.fullname && (<span className="error"> { errors.fullname } </span>)}
+              {errors.name && (
+                <span className="error"> {errors.name} </span>
+              )}
             </div>
 
+            {/* Email */}
             <div className="input-group">
               <label htmlFor="email">Email</label>
               <input
@@ -204,9 +203,12 @@ function Register() {
                 onChange={handleChange}
                 required
               />
-              {errors.email && ( <span className="error"> { errors.email } </span> )}
+              {errors.email && (
+                <span className="error"> {errors.email} </span>
+              )}
             </div>
 
+            {/* Contraseña */}
             <div className="input-group">
               <label htmlFor="password">Contraseña</label>
               <input
@@ -217,10 +219,13 @@ function Register() {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                />
-                {errors.password && ( <span className="error"> { errors.password } </span>)}
+              />
+              {errors.password && (
+                <span className="error"> {errors.password} </span>
+              )}
             </div>
 
+            {/* Repetir contraseña */}
             <div className="input-group">
               <label htmlFor="repeatPassword">Repetir Contraseña</label>
               <input
@@ -232,31 +237,39 @@ function Register() {
                 placeholder="Repetir Contraseña"
                 required
               />
-              {errors.repeatPassword && ( <span className="error"> { errors.repeatPassword }</span>)}
+              {errors.repeatPassword && (
+                <span className="error"> {errors.repeatPassword}</span>
+              )}
             </div>
 
+            {/* Fecha de nacimiento */}
             <div className="input-group">
               <label htmlFor="bornDate">Fecha de Nacimiento</label>
               <input
-              type="date"
-              name="bornDate"
-              id="bornDate"
-              value={formData.bornDate}
-              onChange={handleChange}
-              required
+                type="date"
+                name="bornDate"
+                id="bornDate"
+                value={formData.bornDate}
+                onChange={handleChange}
+                required
               />
-              {errors.bornDate && ( <span className="error"> { errors.bornDate } </span> )}
+              {errors.bornDate && (
+                <span className="error"> {errors.bornDate} </span>
+              )}
             </div>
 
+            {/* País */}
             <div className="input-group">
-              <label htmlFor="country">Seleccione su país</label>
+              <label htmlFor="country">Seleccioná tu país</label>
               <select
-              name="country"
-              id="country"
-              value={formData.country}
-              onChange={handleChange}
+                name="country"
+                id="country"
+                value={formData.country}
+                onChange={handleChange}
               >
-                <option value="" disabled>Seleccione un país</option>
+                <option value="" disabled>
+                  Seleccioná un país
+                </option>
                 <option value="AR">Argentina</option>
                 <option value="BR">Brasil</option>
                 <option value="UY">Uruguay</option>
@@ -268,7 +281,7 @@ function Register() {
               </select>
             </div>
 
-
+            {/* Foto de perfil opcional */}
             <div className="input-group">
               <label htmlFor="image">Foto de Perfil (Opcional)</label>
               <input
@@ -278,20 +291,23 @@ function Register() {
                 accept="image/*"
                 onChange={handleImageChange}
               />
-              {errors.image && (<span className="error">{errors.image}</span>)}
+              {errors.image && (
+                <span className="error">{errors.image}</span>
+              )}
               <small className="input-help">
-                Si no subes una foto, se generará un avatar automáticamente
+                Si no subís una foto, se generará un avatar automáticamente
               </small>
             </div>
 
+            {/* Botón de envío */}
             <div className="input-group">
               <button type="submit">Registrarse</button>
             </div>
 
             <div className="login-link">
               <p>
-                Ya tienes una cuenta?{" "}
-                <Link to="/login">Inicia sesión aquí</Link>
+                ¿Ya tenés una cuenta?{" "}
+                <Link to="/login">Iniciá sesión aquí</Link>
               </p>
             </div>
           </form>

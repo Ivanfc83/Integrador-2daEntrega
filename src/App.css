@@ -1,0 +1,10 @@
+/* Compensación por el header fixed (mobile) */
+.main-container {
+  padding-top: 52px;
+}
+
+@media (min-width: 768px) {
+  .main-container {
+    padding-top: 60px;
+  }
+}

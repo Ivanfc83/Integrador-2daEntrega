@@ -1,78 +1,97 @@
 import "./AdminProducts.css";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
 import ProductForm from "../../../components/product-form/ProductForm";
-import { API } from "../../../config/env.config";
 import TableProductRow from "../../../components/table-product-row/TableProductRow";
 import ShowSwalToast from "../../../config/Swal.fire";
-
+import Pagination from "../../../components/pagination/Pagination";
+import api from "../../../config/api.config";
+import ProductCategory from "../../../components/table-product-row/product-category/ProductCategory";
 
 function AdminProducts() {
-  // ========================================
-  // ESTADO PARA PRODUCTOS
-  // ========================================
+
+  // Lista de productos que se muestra en la tabla
   const [products, setProducts] = useState([]);
 
+  // Guardo acá el producto que el admin quiere editar
+  // Si es null significa que se está creando uno nuevo
   const [editProduct, setEditProduct] = useState(null);
 
-  // ========================================
-  // OBTENER PRODUCTOS DE LA API
-  // ========================================
-  async function getProducts() {
+  // Para la paginación necesito saber cuántos productos hay en total
+  const [totalItems, setTotalItems] = useState(0);
+
+  // Lista de categorías para el selector del formulario
+  const [categories, setCategories] = useState([]);
+
+  // Cuántos productos muestro por página
+  const limit = 5;
+
+  // Al abrir la página cargo las categorías disponibles
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  // Traigo las categorías del backend para usarlas en el formulario
+  async function getCategories() {
     try {
-      const response = await axios.get(`${API}/products`);
-      setProducts(response.data);
-
-
+      const response = await api.get("/categories");
+      setCategories(response.data);
     } catch (error) {
-      ShowSwalToast("Error", "No se pudo cargar el producto.", "error",)
-
-      console.log(error);
+      const mensaje =
+        error?.response?.data?.message || "No se pudieron cargar las categorías";
+      ShowSwalToast("Error", mensaje, "error");
     }
   }
 
-  // useEffect: se ejecuta al montar el componente
+  // Traigo los productos paginados — por defecto cargo la primera página
+  async function getProducts(pagina = 1) {
+    try {
+      const response = await api.get(
+        `/products?page=${pagina}&limit=${limit}`
+      );
+
+      setProducts(response.data.products);
+      setTotalItems(response.data.totalItems);
+    } catch (error) {
+      const mensaje =
+        error?.response?.data?.message || "No se pudo cargar la lista de productos";
+      ShowSwalToast("Error", mensaje, "error");
+    }
+  }
+
+  // Cargo los productos cuando se abre esta página
   useEffect(() => {
     getProducts();
   }, []);
 
-
-  // ========================================
-  // ELIMINAR PRODUCTO
-  // ========================================
-  function deleteProduct(id, name) {
-
-    //Confirma antes de eliminar
+  // Antes de borrar le pregunto al admin si está seguro
+  // así evito borrados accidentales
+  function deleteProduct(idBorrar, name) {
     Swal.fire({
       title: `¿Estás seguro de querer eliminar ${name}?`,
-      text: 'No se podrá revertir esta acción',
-      icon: 'warning',
+      text: "No se podrá revertir esta acción",
+      icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#f64504",
       cancelButtonColor: "#6c757d",
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
-    }).then( async (result) => {
-
-      if(result.isConfirmed){
+    }).then(async (result) => {
+      if (result.isConfirmed) {
         try {
+          await api.delete(`/products/${idBorrar}`);
 
-          await axios.delete(`${API}/products/${id}`);
+          ShowSwalToast("Eliminado", "Producto eliminado.");
 
-          ShowSwalToast("Elimando", "Producto eliminado.")
-
-          //Actualizar la lista
-        getProducts();
-
+          // Recargo la lista para que desaparezca el producto borrado
+          getProducts();
         } catch (error) {
-        console.log(error);
-        
-        ShowSwalToast("Error", "No se pudo eliminar el producto.", "error")
-
+          const mensaje =
+            error?.response?.data?.message || "No se pudo eliminar el producto";
+          ShowSwalToast("Error", mensaje, "error");
         }
       }
-    })
+    });
   }
 
   return (
@@ -82,11 +101,9 @@ function AdminProducts() {
           <h2 className="title">Panel de Administración de Productos</h2>
         </div>
 
-
         <div className="admin-products">
-          {/* ========================================
-            FORMULARIO (IZQUIERDA)
-        ======================================== */}
+
+          {/* Formulario para crear o editar productos (columna izquierda) */}
           <div className="admin-form">
             <h4>Agregar Producto</h4>
 
@@ -94,12 +111,11 @@ function AdminProducts() {
               getProducts={getProducts}
               editProduct={editProduct}
               setEditProduct={setEditProduct}
+              categories={categories}
             />
           </div>
 
-          {/* ========================================
-            TABLA (DERECHA)
-        ======================================== */}
+          {/* Tabla con todos los productos (columna derecha) */}
           <div className="products-table">
             <div className="table-wrapper">
               <table className="table table-striped table-hover">
@@ -108,21 +124,20 @@ function AdminProducts() {
                     <th className="imagen-icon">Producto</th>
                     <th className="name-cell">Nombre</th>
                     <th className="description-cell">Descripción</th>
-                    <th className="date-cell">Fecha </th>
+                    <th className="date-cell">Fecha</th>
+                    <th className="category-cell">Categorías</th>
                     <th className="price-cell">Precio</th>
                     <th className="buttons-cell">Acciones</th>
                   </tr>
                 </thead>
 
                 <tbody>
-
                   {products.map((product) => (
-
                     <TableProductRow
-                    key={product.id}
-                    product={product}
-                    deleteProduct={deleteProduct}
-                    setEditProduct={setEditProduct}
+                      key={product._id}
+                      product={product}
+                      deleteProduct={deleteProduct}
+                      setEditProduct={setEditProduct}
                     />
                   ))}
                 </tbody>
@@ -130,7 +145,24 @@ function AdminProducts() {
             </div>
           </div>
 
+          {/* Paginación debajo de la tabla */}
+          <div className="d-flex justify-content-between align-items-center mt-3">
+            <Pagination
+              getProducts={getProducts}
+              totalItems={totalItems}
+              itemsPerPage={limit}
+            />
+            <select name="" id="">
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
         </div>
+
+        {/* Formulario para crear categorías nuevas */}
+        <ProductCategory getCategories={getCategories} />
       </div>
     </>
   );

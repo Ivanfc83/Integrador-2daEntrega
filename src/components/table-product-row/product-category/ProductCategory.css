@@ -1,0 +1,112 @@
+/* ===============================
+  FORMULARIO DE NUEVA CATEGORÍA
+  Vive debajo de la tabla en AdminProducts
+  Mismo estilo que el form de productos
+================================ */
+
+.category-form-wrapper {
+  padding: 0 1rem 2rem;
+}
+
+.category-form-container {
+  border: 2px solid #000;
+  padding: 1rem;
+  background-color: #000;
+  max-width: 350px;  /* Mismo ancho que la columna del form de productos */
+}
+
+.category-form-container h4 {
+  color: #fff;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #fff;
+  padding-bottom: 0.5rem;
+  font-family: 'Quicksand', sans-serif;
+}
+
+/* Labels */
+.admin-category-form .form-label {
+  font-weight: 600 !important;
+  color: #fff !important;
+  margin-bottom: 0.5rem !important;
+  font-size: 0.9rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  display: block !important;
+}
+
+/* Inputs */
+.admin-category-form .form-control {
+  border: 1px solid #767677 !important;
+  border-radius: 0 !important;
+  padding: 0.8rem !important;
+  font-size: 0.95rem !important;
+  background-color: #fff !important;
+  color: #000 !important;
+  transition: all 0.2s ease !important;
+  width: 100% !important;
+}
+
+.admin-category-form .form-control:focus {
+  outline: none !important;
+  border-color: #000 !important;
+  background-color: #ECEFF1 !important;
+  box-shadow: none !important;
+}
+
+.admin-category-form .form-control::placeholder {
+  color: #999;
+}
+
+.admin-category-form .mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+/* Mensaje de error de validación */
+.cat-error {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+  display: block;
+}
+
+/* Botón de envío — negro con borde blanco, hover invertido */
+.btn-cat-submit {
+  background-color: #000;
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 0;
+  transition: all 0.3s ease;
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.9rem;
+}
+
+.btn-cat-submit:hover {
+  background-color: #fff;
+  color: #000;
+  border-color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* RESPONSIVE */
+@media (min-width: 768px) {
+  .category-form-wrapper {
+    padding: 0 2rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .category-form-wrapper {
+    padding: 0 3rem 3rem;
+  }
+}
