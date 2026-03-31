@@ -88,6 +88,9 @@ El carrito vive en el `OrderContext`. Desde ahí se maneja todo: agregar product
 ### Login y sesión
 Cuando el usuario se loguea, los datos se guardan en el `localStorage` para que no se pierdan al recargar. También tengo interceptores en axios que le agregan el token a todas las peticiones automáticamente y si el servidor devuelve un error 401 (sesión vencida), avisa al usuario y lo manda al login.
 
+### Búsqueda de productos
+Desde el header hay un ícono de lupa que despliega una barra de búsqueda. Al escribir un término y confirmar, la app navega a `/products?q=término` y filtra los productos por nombre, descripción o categoría. Se muestra la cantidad de resultados encontrados y un mensaje si no hay coincidencias.
+
 ### Panel de administración
 Solo los usuarios con rol `admin` pueden ver los links del panel. Las rutas del admin están protegidas con un componente `AdminGuard` que redirige si el usuario no es admin. Desde el panel se pueden crear productos con hasta 4 fotos, crear categorías y cambiar el rol de los usuarios.
 
