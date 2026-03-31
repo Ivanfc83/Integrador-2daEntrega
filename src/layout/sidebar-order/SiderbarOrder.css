@@ -2,18 +2,18 @@
   SIDEBAR DEL CARRITO
 ================================ */
 
-/* Overlay oscuro detrás del sidebar */
+/* El sidebar se desliza desde la derecha */
 .sidebar-order-container {
   position: fixed;
   top: 52px;              /* altura del header mobile */
   right: -340px;          /* oculto por defecto */
   width: 320px;
   bottom: 0;
-  background-color: #fff;
-  padding: 1.5rem 1.2rem;
+  background-color: #111; /* fondo oscuro */
+  padding: 1.2rem 1rem;
   transition: right 0.3s ease-in-out;
   z-index: 1500;          /* debajo del header (2000) pero encima del contenido */
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -37,13 +37,14 @@
 }
 
 .siderbar-order-wrapper h2 {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 1.2rem;
+  color: #fff;
+  margin-bottom: 1rem;
   padding-bottom: 0.8rem;
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid #fff;
 }
 
 /* Lista de items */
@@ -62,7 +63,7 @@
 /* Total y botón */
 .order__total {
   padding-top: 1rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #333;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -71,9 +72,32 @@
 .order__total h3 {
   font-size: 1rem;
   font-weight: 700;
+  color: #fff;
   margin: 0;
 }
 
+/* Botón "Finalizar compra" */
 .order__total .btn {
   width: 100%;
+  background-color: #fff;
+  color: #000;
+  border: none;
+  border-radius: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.order__total .btn:hover:not(:disabled) {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+.order__total .btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }

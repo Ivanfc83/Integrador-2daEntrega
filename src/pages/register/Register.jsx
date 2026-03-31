@@ -40,7 +40,7 @@ function Register() {
   // Si el usuario no sube foto, genero un avatar automático con su nombre
   function generateDefaultAvatar(name, email) {
     const seed = name || email || Date.now();
-    return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;
+    return `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;
   }
 
   // Manejo la carga de la foto de perfil

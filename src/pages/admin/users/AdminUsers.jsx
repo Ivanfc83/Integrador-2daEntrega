@@ -4,12 +4,22 @@ import ShowSwalToast from "../../../config/Swal.fire";
 import api from "../../../config/api.config";
 import Swal from "sweetalert2";
 import TableUserRow from "../../../components/table-user-row/TableUserRow";
+import Pagination from "../../../components/pagination/Pagination";
 import "./AdminUser.css";
 
 function AdminUsers() {
 
-  // Lista de usuarios que voy a mostrar en la tabla
-  const [users, setUsers] = useState([]);
+  // Todos los usuarios que traje del backend
+  const [allUsers, setAllUsers] = useState([]);
+
+  // Cuántos usuarios muestro por página
+  const limit = 5;
+
+  // Página actual de la tabla
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Los usuarios que realmente se muestran en la tabla (slice de allUsers)
+  const users = allUsers.slice((currentPage - 1) * limit, currentPage * limit);
 
   // Si editUser tiene un objeto, el form está en modo edición
   // Si es null, estamos creando un usuario nuevo
@@ -47,7 +57,8 @@ function AdminUsers() {
   async function getUsers() {
     try {
       const response = await api.get(`/users`);
-      setUsers(response.data);
+      setAllUsers(response.data);
+      setCurrentPage(1);
     } catch (error) {
       const mensaje =
         error?.response?.data?.message || "No se pudo cargar la lista de usuarios";
@@ -81,7 +92,7 @@ function AdminUsers() {
         // Si no puso foto, genero un avatar automático
         const newUser = {
           ...data,
-          image: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(data.name)}`,
+          image: `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(data.name)}`,
           createdAt: new Date().toISOString(),
         };
 
@@ -299,6 +310,16 @@ function AdminUsers() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Paginación debajo de la tabla */}
+            <div className="pagination-wrapper">
+              <Pagination
+                getProducts={setCurrentPage}
+                totalItems={allUsers.length}
+                itemsPerPage={limit}
+                currentPage={currentPage}
+              />
             </div>
           </div>
 

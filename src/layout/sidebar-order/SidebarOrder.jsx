@@ -1,5 +1,6 @@
 import userOrder from "../../context/userOrder";
 import OrderItem from "../../components/order-item/OrderItem";
+import { useNavigate } from "react-router-dom";
 import "./SiderbarOrder.css";
 
 // Sidebar del carrito de compras que se desliza desde la derecha
@@ -15,8 +16,7 @@ function SidebarOrder() {
     user,
   } = userOrder();
 
-  // Cuando sidebarToggle es true, agrego la clase "active"
-  // que en el CSS hace el deslizamiento hacia adentro
+  const navigate = useNavigate();
   const sidebarClass = sidebarToggle ? "active" : "";
 
   return (
@@ -48,6 +48,15 @@ function SidebarOrder() {
         {/* Total y botón para finalizar — el botón se desactiva
             si no hay items o si el usuario no está logueado */}
         <div className="order__total">
+          <h3>Total: $ {totalPrice.toLocaleString("es-AR")}</h3>
+          {/* Botón para ir a la página completa de checkout */}
+          <button
+            className="btn btn-primary"
+            onClick={() => { toggleSidebar(); navigate("/checkout"); }}
+            disabled={items.length === 0}
+          >
+            Ver carrito completo
+          </button>
           <button
             className="btn btn-primary"
             onClick={createOrder}
@@ -55,7 +64,6 @@ function SidebarOrder() {
           >
             Finalizar compra
           </button>
-          <h3>Total: ${totalPrice}</h3>
         </div>
       </div>
     </div>

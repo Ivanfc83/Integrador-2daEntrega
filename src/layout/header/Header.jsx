@@ -89,6 +89,27 @@ function Header() {
               <ul className="navbar-nav">
                 {NAV_ITEMS.map((item, index) => {
                   if (item.adminOnly && !isAdmin) return null;
+
+                  // Si el item tiene sub-links, muestro un dropdown
+                  if (item.dropdown) {
+                    return (
+                      <li className="nav-item nav-dropdown" key={index}>
+                        <span className="nav-link nav-dropdown-toggle">
+                          {item.text}
+                        </span>
+                        <ul className="nav-dropdown-menu">
+                          {item.dropdown.map((sub, i) => (
+                            <li key={i}>
+                              <NavLink to={sub.path} className="nav-dropdown-item">
+                                {sub.text}
+                              </NavLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    );
+                  }
+
                   return (
                     <li className="nav-item" key={index}>
                       <NavLink to={item.path} className="nav-link">

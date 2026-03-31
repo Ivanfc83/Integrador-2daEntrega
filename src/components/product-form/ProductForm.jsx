@@ -39,11 +39,10 @@ function ProductForm({ getProducts, editProduct, setEditProduct, categories }) {
       formData.append("sportType", product.sportType);
       formData.append("description", product.description);
 
-      // Agrego las imágenes con sus nombres correspondientes (image1, image2, etc.)
-      const imageKeys = ["image1", "image2", "image3", "image4"];
+      // El backend usa multer.array("image", 4) — todos van con el mismo campo "image"
       const files = product.images ? Array.from(product.images) : [];
-      files.slice(0, 4).forEach((file, i) => {
-        formData.append(imageKeys[i], file);
+      files.slice(0, 4).forEach((file) => {
+        formData.append("image", file);
       });
 
       if (editProduct) {
@@ -71,8 +70,11 @@ function ProductForm({ getProducts, editProduct, setEditProduct, categories }) {
       if (getProducts) getProducts();
 
     } catch (error) {
+      // El backend a veces devuelve el error como string directo y otras como { message }
+      const data = error?.response?.data;
       const mensaje =
-        error?.response?.data?.message || "Revisá los campos e intentá de nuevo";
+        (typeof data === "string" ? data : data?.message) ||
+        "Revisá los campos e intentá de nuevo";
       ShowSwalToast("Error", mensaje, "error");
     }
   }
@@ -80,18 +82,19 @@ function ProductForm({ getProducts, editProduct, setEditProduct, categories }) {
   // Cuando el admin elige un producto para editar, cargo sus datos en el formulario
   useEffect(() => {
     if (editProduct) {
-      setValue("name", editProduct.name);
-      setValue("price", editProduct.price);
-      setValue("oldPrice", editProduct.oldPrice);
+      const opts = { shouldDirty: true };
+      setValue("name", editProduct.name, opts);
+      setValue("price", editProduct.price, opts);
+      setValue("oldPrice", editProduct.oldPrice, opts);
       // La categoría puede venir como objeto o como string, manejo los dos casos
-      setValue("category", editProduct.category?._id || editProduct.category);
-      setValue("gender", editProduct.gender);
-      setValue("sportType", editProduct.sportType);
-      setValue("description", editProduct.description);
+      setValue("category", editProduct.category?._id || editProduct.category, opts);
+      setValue("gender", editProduct.gender, opts);
+      setValue("sportType", editProduct.sportType, opts);
+      setValue("description", editProduct.description, opts);
 
       // Muestro las imágenes actuales del producto como previsualizaciones
       const existing = [
-        editProduct.image,
+        editProduct.image1,
         editProduct.image2,
         editProduct.image3,
         editProduct.image4,
@@ -125,6 +128,7 @@ function ProductForm({ getProducts, editProduct, setEditProduct, categories }) {
             })}
             className="form-control"
             id="name"
+            autoComplete="off"
           />
           {errors?.name && (
             <div className="text-danger text-sm">{errors.name?.message}</div>

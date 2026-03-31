@@ -65,6 +65,14 @@
 .admin-products-page {
   padding-bottom: 3rem;
 }
+
+/* La paginación va debajo de la tabla, alineada a la derecha */
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.75rem 0;
+}
+
 /* ===============================
   CABECERA DE LA TABLA
 ================================ */
@@ -321,12 +329,21 @@
 
   .admin-products {
     display: grid;
-    grid-template-columns: 350px 1fr;
+    grid-template-columns: 370px 1fr;
     gap: 2.5rem;
     max-width: 1600px;
     margin: 0 auto;
     padding: 0 3rem;
     align-items: start;
+  }
+
+  /* La columna izquierda agrupa form de producto + form de categoría */
+  .admin-left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: sticky;
+    top: 80px;
   }
 
   .products-form {

@@ -3,8 +3,30 @@
 ================================ */
 
 .home-container {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
   width: 100%;
+}
+
+.home-greeting {
+  margin-top: 20px;
+  padding: 0 1rem;
+}
+
+/* Títulos de sección (DESTACADOS, OFERTAS) */
+.product-title {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 1.5rem 0 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .product-title {
+    font-size: 1.3rem;
+    margin: 2rem 0 0.5rem;
+  }
 }
 
 .product-grid {

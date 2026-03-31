@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import ShowSwalToast from "../config/Swal.fire";
 import useUser from "./useUser";
 import api from "../config/api.config";
@@ -16,28 +16,19 @@ function OrderProvider({ children }) {
   // Lista de productos que hay en el carrito
   const [items, setItems] = useState([]);
 
-  // Cantidad total de productos (sumando las cantidades de cada uno)
-  const [totalItems, setTotalItems] = useState(0);
-
-  // Precio total del carrito
-  const [totalPrice, setTotalPrice] = useState(0);
-
   // Controla si el sidebar del carrito está abierto o cerrado
   const [sidebarToggle, setSidebarToggle] = useState(false);
 
-  // Cada vez que cambia el carrito, recalculo los totales
-  useEffect(() => {
-    let precioTotal = 0;
-    let cantidadTotal = 0;
-
-    for (let item of items) {
-      precioTotal += item.quantity * item.price;
-      cantidadTotal += item.quantity;
-    }
-
-    setTotalItems(cantidadTotal);
-    setTotalPrice(precioTotal);
-  }, [items]);
+  // Calculo los totales directo del array — sin useEffect para evitar
+  // problemas de timing donde el estado se lee antes de actualizarse
+  let totalItems = 0;
+  let totalPrice = 0;
+  for (const item of items) {
+    const price = parseFloat(item.price) || 0;
+    const qty = parseInt(item.quantity) || 0;
+    totalPrice += price * qty;
+    totalItems += qty;
+  }
 
   // Agrega un producto al carrito
   // Si ya estaba, le suma 1 a la cantidad en vez de duplicarlo
@@ -53,8 +44,10 @@ function OrderProvider({ children }) {
         )
       );
     } else {
-      // Agrego el producto con cantidad 1 por defecto
-      setItems((prev) => [...prev, { ...product, quantity: 1 }]);
+      // Me aseguro de que el precio sea número y no string
+      // Si llega como string "25000", Number() lo convierte a 25000
+      // para que la suma sea matemática y no concatenación de texto
+      setItems((prev) => [...prev, { ...product, price: parseFloat(product.price) || 0, quantity: 1 }]);
     }
   }
 
@@ -99,9 +92,16 @@ function OrderProvider({ children }) {
       // Mando la orden al servidor, se crea
       await api.post(`/orders`, order);
 
-      //Trae todas las órdenes y las muestra por consola
-      const ordenes = await api.get(`orders`);
-      console.log("Órdenes creadas:", ordenes.data);
+      // Solo el admin puede traer todas las órdenes — el cliente no tiene permiso
+      // por eso lo pongo aparte con su propio try/catch para que no rompa el flujo
+      if (user.role === "admin") {
+        try {
+          const ordenes = await api.get(`/orders`);
+          console.log("Órdenes creadas:", ordenes.data);
+        } catch {
+          // Si falla el GET de órdenes, no interrumpo la compra
+        }
+      }
 
       ShowSwalToast("Tu orden ha sido creada exitosamente", "Orden creada");
 
@@ -116,6 +116,11 @@ function OrderProvider({ children }) {
         "error"
       );
     }
+  }
+
+  // Vacía el carrito por completo — el profe lo pidió como clearCart/emptyCart
+  function clearCart() {
+    setItems([]);
   }
 
   // Abre o cierra el sidebar del carrito
@@ -133,6 +138,7 @@ function OrderProvider({ children }) {
         addItem,
         changeQuantity,
         removeItem,
+        clearCart,
         totalItems,
         totalPrice,
         createOrder,

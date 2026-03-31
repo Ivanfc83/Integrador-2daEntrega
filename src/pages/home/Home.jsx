@@ -28,7 +28,8 @@ function Home() {
     try {
       setLoading(true);
 
-      const response = await api.get(`/products`);
+      // Traigo todos los productos con un límite alto para poder filtrar en el cliente
+      const response = await api.get(`/products?page=1&limit=100`);
 
       // El backend puede devolver array directo o { products: [...] }
       const rawData = response.data.products || response.data;
@@ -56,23 +57,18 @@ function Home() {
     getProducts();
   }, []);
 
-  // Filtro los productos destacados — si no hay ninguno con esa categoría,
-  // muestro los últimos 4 que haya
+  // Un producto tiene descuento real solo si oldPrice es mayor al precio actual
+  // (la misma condición que usa la card para mostrar el precio tachado)
+  const tieneDescuento = (prod) => Number(prod.oldPrice) > Number(prod.price);
+
+  // Productos SIN descuento — van en la sección "Destacados"
   const productosAMostrar = useMemo(() => {
-    const filtrados = products.filter((prod) => {
-      const catName = (prod.category?.name || prod.category || "").toLowerCase();
-      return catName === "destacados";
-    });
-    return filtrados.length > 0 ? filtrados.slice(0, 4) : products.slice(-4);
+    return products.filter((prod) => !tieneDescuento(prod)).slice(0, 4);
   }, [products]);
 
-  // Filtro los productos en oferta — si no hay, muestro los primeros 4
+  // Productos CON descuento real — van en la sección "Ofertas"
   const ofertasAMostrar = useMemo(() => {
-    const filtrados = products.filter((prod) => {
-      const catName = (prod.category?.name || prod.category || "").toLowerCase();
-      return catName === "ofertas";
-    });
-    return filtrados.length > 0 ? filtrados.slice(0, 4) : products.slice(0, 4);
+    return products.filter((prod) => tieneDescuento(prod)).slice(0, 4);
   }, [products]);
 
   // Mientras carga muestro un mensaje de espera
@@ -90,9 +86,9 @@ function Home() {
 
         {/* Saludo personalizado si hay usuario logueado */}
         {user ? (
-          <p>Bienvenido, {user.name}</p>
+          <p className="home-greeting">Bienvenido, {user.name}</p>
         ) : (
-          <p>Bienvenido a nuestro sitio</p>
+          <p className="home-greeting">Bienvenido a nuestro sitio</p>
         )}
 
         {/* Carrusel de imágenes principales */}

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ShowSwalToast from "../../config/Swal.fire";
 import userOrder from "../../context/userOrder";
 import api from "../../config/api.config";
+import { FILES } from "../../config/env.config";
 
 function ProductDetail() {
 
@@ -60,12 +61,16 @@ function ProductDetail() {
   }
 
   // Junto todas las imágenes del producto y filtro las que no existan
+  // El backend guarda los nombres de archivo (ej: "abc123.jpg"), no la URL completa
+  // por eso le agrego el prefijo FILES/products/ para armar la URL correcta
   const images = [
-    product.image,
+    product.image1,
     product.image2,
     product.image3,
     product.image4,
-  ].filter(Boolean);
+  ]
+    .filter(Boolean)
+    .map((filename) => `${FILES}/products/${filename}`);
 
   return (
     <>

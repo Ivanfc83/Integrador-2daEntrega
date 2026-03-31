@@ -20,7 +20,7 @@ function ProductCard({ product }) {
       {/* Imagen con link al detalle del producto */}
       <div className="product-image">
         <img
-          src={`${FILES}/products/${product?.image}`}
+          src={`${FILES}/products/${product?.image1}`}
           alt={product?.name}
         />
         {/* Icono de ojo que aparece al pasar el mouse — va al detalle */}

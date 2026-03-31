@@ -8,12 +8,20 @@ function ShowSwalToast(titulo, descripcion, iconito = "success") {
     title: titulo,
     text: descripcion,
     icon: iconito,
-    position: "top-right",  // Aparece en la esquina superior derecha
-    timer: 2000,             // Se cierra solo a los 2 segundos
-    showConfirmButton: false, // No muestra botón de confirmación
-    toast: true,             // Modo compacto (toast)
+    position: "top-right",
+    timer: 2500,
+    timerProgressBar: true,
+    showConfirmButton: false,
+    toast: true,
+
+    // Tema oscuro para que combine con el diseño de la app
+    background: "#1a1a1a",
+    color: "#ffffff",
+
     customClass: {
       container: "swal-container-custom",
+      popup: "swal-toast-dark",
+      title: "swal-title-dark",
     },
     didOpen: (toast) => {
       // Me aseguro que aparezca por encima de todo lo demás

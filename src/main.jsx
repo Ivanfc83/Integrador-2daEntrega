@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
@@ -12,19 +11,15 @@ createRoot(document.getElementById("root")).render(
   // BrowserRouter habilita el sistema de rutas con React Router
   <BrowserRouter>
 
-    {/* StrictMode ayuda a detectar problemas en desarrollo
-        (puede ejecutar algunos efectos dos veces intencionalmente) */}
-    <StrictMode>
+    {/* UserProvider da acceso al estado del usuario en toda la app */}
+    <UserProvider>
 
-      {/* UserProvider da acceso al estado del usuario en toda la app */}
-      <UserProvider>
+      {/* OrderProvider da acceso al carrito en toda la app */}
+      <OrderProvider>
+        <App />
+      </OrderProvider>
 
-        {/* OrderProvider da acceso al carrito en toda la app */}
-        <OrderProvider>
-          <App />
-        </OrderProvider>
+    </UserProvider>
 
-      </UserProvider>
-    </StrictMode>
   </BrowserRouter>
 );

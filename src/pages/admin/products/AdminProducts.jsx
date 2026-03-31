@@ -20,6 +20,9 @@ function AdminProducts() {
   // Para la paginación necesito saber cuántos productos hay en total
   const [totalItems, setTotalItems] = useState(0);
 
+  // Página actual — para resaltar el botón activo en la paginación
+  const [currentPage, setCurrentPage] = useState(1);
+
   // Lista de categorías para el selector del formulario
   const [categories, setCategories] = useState([]);
 
@@ -52,6 +55,7 @@ function AdminProducts() {
 
       setProducts(response.data.products);
       setTotalItems(response.data.totalItems);
+      setCurrentPage(pagina);
     } catch (error) {
       const mensaje =
         error?.response?.data?.message || "No se pudo cargar la lista de productos";
@@ -103,16 +107,22 @@ function AdminProducts() {
 
         <div className="admin-products">
 
-          {/* Formulario para crear o editar productos (columna izquierda) */}
-          <div className="admin-form">
-            <h4>Agregar Producto</h4>
+          {/* Columna izquierda: form de producto y form de categoría apilados */}
+          <div className="admin-left-col">
 
-            <ProductForm
-              getProducts={getProducts}
-              editProduct={editProduct}
-              setEditProduct={setEditProduct}
-              categories={categories}
-            />
+            <div className="admin-form">
+              <h4>{editProduct ? "Editar Producto" : "Agregar Producto"}</h4>
+              <ProductForm
+                getProducts={getProducts}
+                editProduct={editProduct}
+                setEditProduct={setEditProduct}
+                categories={categories}
+              />
+            </div>
+
+            {/* Formulario de categorías debajo del de productos */}
+            <ProductCategory getCategories={getCategories} />
+
           </div>
 
           {/* Tabla con todos los productos (columna derecha) */}
@@ -143,26 +153,19 @@ function AdminProducts() {
                 </tbody>
               </table>
             </div>
-          </div>
 
-          {/* Paginación debajo de la tabla */}
-          <div className="d-flex justify-content-between align-items-center mt-3">
-            <Pagination
-              getProducts={getProducts}
-              totalItems={totalItems}
-              itemsPerPage={limit}
-            />
-            <select name="" id="">
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-            </select>
+            {/* Paginación debajo de la tabla */}
+            <div className="pagination-wrapper">
+              <Pagination
+                getProducts={getProducts}
+                totalItems={totalItems}
+                itemsPerPage={limit}
+                currentPage={currentPage}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Formulario para crear categorías nuevas */}
-        <ProductCategory getCategories={getCategories} />
       </div>
     </>
   );

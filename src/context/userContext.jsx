@@ -23,14 +23,14 @@ function UserProvider({ children }) {
     JSON.parse(localStorage.getItem("user"))?.role === "admin" || false,
   );
 
-  // Cada vez que cambia el usuario o el token,
-  // los guardo en localStorage para persistir la sesión
+  // Cada vez que cambia el usuario o el token los guardo en localStorage
+  // así cuando recargo la página no pierdo la sesión
   useEffect(() => {
     if (user) {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
     } else {
-      // Si no hay usuario (por ejemplo, hizo logout), limpio todo
+      // Si no hay usuario (por ejemplo hizo logout) limpio todo
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       localStorage.removeItem("isAdmin");
@@ -51,30 +51,30 @@ function UserProvider({ children }) {
 
       ShowSwalToast("Bienvenido", "Has iniciado sesión correctamente");
 
-      // Redirijo al home después del login exitoso
+      // Mando al home después de entrar
       navigate("/");
     } catch (error) {
-      // Si el login falla (contraseña incorrecta, usuario no existe, etc.)
+      // Si el login falla muestro el mensaje de error que manda el backend
       const mensaje =
         error?.response?.data?.message || "Credenciales incorrectas";
       ShowSwalToast("Error", mensaje, "error");
     }
   }
 
-  // Función de logout: limpia todos los estados del usuario
+  // Limpia todos los datos del usuario cuando hace logout
   function logout() {
     setUser(null);
     setToken(null);
     setIsAdmin(false);
   }
 
-  // Este efecto configura los interceptores de axios
-  // Los interceptores son como "middlewares" que se ejecutan
-  // antes de cada request y después de cada response
+  // Acá configuro los interceptores de axios
+  // Son funciones que se ejecutan antes y después de cada llamada a la API
+  // así no tengo que repetir el token en cada petición ni manejar el 401 en cada catch
   useEffect(() => {
 
-    // Interceptor de REQUEST: agrega el token en el header de cada petición
-    // para que el backend sepa que el usuario está autenticado
+    // Cada vez que se hace una petición le agrego el token en el header
+    // Si no lo pongo el backend no sabe quién soy y me rechaza
     const interceptorRequest = api.interceptors.request.use((config) => {
       if (token) {
         config.headers.Authorization = token;
@@ -84,13 +84,13 @@ function UserProvider({ children }) {
       return config;
     });
 
-    // Interceptor de RESPONSE: maneja errores globales
-    // El caso más común es el 401 que significa sesión expirada
+    // Acá manejo los errores que vienen del servidor
+    // Si llega un 401 significa que la sesión venció o el token no sirve más
     const interceptorResponse = api.interceptors.response.use(
-      (response) => response, // Si todo va bien, dejo pasar la respuesta
+      (response) => response,
       (error) => {
         if (error?.response?.status === 401) {
-          // El token expiró o es inválido, aviso al usuario y lo mando al login
+          // Aviso al usuario que su sesión se terminó y lo mando al login
           Swal.fire({
             icon: "error",
             title: "Sesión expirada",
@@ -104,24 +104,23 @@ function UserProvider({ children }) {
             logout();
           });
 
-          // Devuelvo una promesa que nunca se resuelve para cortar la cadena de errores
+          // Devuelvo una promesa vacía para que no siga tirando errores en los otros catch
           return new Promise(() => {});
         } else {
-          // Para cualquier otro error lo dejo pasar normalmente
           return Promise.reject(error);
         }
       },
     );
 
-    // Cuando el componente se desmonta o cambia el token,
-    // elimino los interceptores para no duplicarlos
+    // Cuando cambia el token limpio los interceptores viejos
+    // para no terminar con varios registrados al mismo tiempo
     return () => {
       api.interceptors.request.eject(interceptorRequest);
       api.interceptors.response.eject(interceptorResponse);
     };
   }, [token]);
 
-  // Expongo lo que van a necesitar los demás componentes
+  // Comparto con el resto de la app lo que necesitan
   return (
     <UserContext.Provider value={{ user, token, login, logout, isAdmin }}>
       {children}

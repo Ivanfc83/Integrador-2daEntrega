@@ -11,6 +11,7 @@ import Footer from "./layout/footer/Footer";
 import AdminUsers from "./pages/admin/users/AdminUsers";
 import Login from "./pages/login/Login";
 import Contact from "./pages/contact/Contact";
+import Checkout from "./pages/checkout/Checkout";
 import ScrollToTop from "./config/ScrollToTop";
 import AdminGuard from "./services/guard/AdminGuard";
 import SidebarOrder from "./layout/sidebar-order/SidebarOrder";
@@ -47,6 +48,8 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           <Route path="/contact" element={<Contact />} />
+
+          <Route path="/checkout" element={<Checkout />} />
 
           {/* Rutas de admin protegidas — AdminGuard verifica el rol antes de entrar */}
           <Route path="/admin" element={<AdminGuard />}>

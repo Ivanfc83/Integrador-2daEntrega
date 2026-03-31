@@ -15,7 +15,7 @@ function TableProductRow({ product, deleteProduct, setEditProduct }) {
         <td className="imagen-icon">
           <NavLink to={`/product/${product._id}`} className="product-link">
             <img
-              src={`${FILES}/products/${product.image}`}
+              src={`${FILES}/products/${product.image1}`}
               alt={product.name}
               style={{ cursor: "pointer" }}
             />
@@ -35,8 +35,13 @@ function TableProductRow({ product, deleteProduct, setEditProduct }) {
           {FormartISODateToLocal(product.createdAt)}
         </td>
 
+        {/* Categoría del producto */}
+        <td className="category-cell">
+          {product.category?.name || product.category || "-"}
+        </td>
+
         {/* Precio del producto */}
-        <td className="price-cell">{product.price}</td>
+        <td className="price-cell">${product.price}</td>
 
         {/* Botones de acciones: editar y eliminar */}
         <td className="buttons-cell">

@@ -15,19 +15,19 @@ function OrderItem({ item }) {
   return (
     <div className="order__item">
 
-      {/* Imagen del producto */}
+      {/* Imagen del producto — usa image1 que es como lo guarda el backend */}
       <div className="order__img">
-        <img src={`${FILES}/products/${item.image}`} alt={item.name} />
+        <img src={`${FILES}/products/${item.image1}`} alt={item.name} />
       </div>
 
       {/* Nombre, precio y controles de cantidad */}
       <div className="order__info">
         <h3 className="order__name">{item.name}</h3>
 
-        {/* Precio unitario y subtotal (precio x cantidad) */}
+        {/* Solo muestro el subtotal: precio unitario × cantidad */}
+        {/* Uso Number() para asegurarme que la multiplicación sea matemática */}
         <p className="order__price">
-          ${item.price}{" "}
-          <small>{item.price * item.quantity}</small>
+          ${(parseFloat(item.price) || 0).toLocaleString("es-AR")} × {item.quantity} = <strong>${((parseFloat(item.price) || 0) * item.quantity).toLocaleString("es-AR")}</strong>
         </p>
 
         {/* Botones para aumentar o disminuir la cantidad */}

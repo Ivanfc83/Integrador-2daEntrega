@@ -1,32 +1,26 @@
-// Componente de paginación — recibe la función para buscar productos,
-// la cantidad total de productos y cuántos mostrar por página
-function Pagination({ getProducts, totalItems, itemsPerPage }) {
+import "./Pagination.css";
+
+// Componente de paginación — recibe la función para cambiar de página,
+// la cantidad total de items y cuántos se muestran por página
+function Pagination({ getProducts, totalItems, itemsPerPage, currentPage = 1 }) {
 
   // Calculo cuántas páginas necesito en total
-  // Math.ceil redondea para arriba, así si sobran items igual los muestro
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  // Armo el array de botones dinámicamente, uno por cada página
-  const paginationButtons = [];
-
-  for (let i = 1; i <= totalPages; i++) {
-    paginationButtons.push(
-      <li className="page-item" key={i}>
-        {/* Al clickear un número, llamo a getProducts con ese número de página */}
-        <button className="page-link" onClick={() => getProducts(i)}>
-          {i}
-        </button>
-      </li>
-    );
-  }
+  // Si solo hay una página no tiene sentido mostrar la paginación
+  if (totalPages <= 1) return null;
 
   return (
-    <div className="pagination-container pt-3">
-      <nav aria-label="Page Navigation">
-        <ul className="pagination ml-auto">
-          {paginationButtons}
-        </ul>
-      </nav>
+    <div className="pag-container">
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+        <button
+          key={num}
+          className={`pag-btn ${currentPage === num ? "pag-btn--active" : ""}`}
+          onClick={() => getProducts(num)}
+        >
+          {num}
+        </button>
+      ))}
     </div>
   );
 }

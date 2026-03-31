@@ -10,7 +10,7 @@ function TableUserRow({ user, deleteUser, setEditUser }) {
   // para generar un avatar automático a partir de su nombre
   const avatarUrl =
     user.image ||
-    `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.name)}`;
+    `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(user.name)}`;
 
   return (
     <>
