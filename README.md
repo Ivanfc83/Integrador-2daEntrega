@@ -1,6 +1,6 @@
-# Ecommerce Adidas - Proyecto React
+# Ecommerce - Proyecto React
 
-Este es mi proyecto de ecommerce para el curso. Simula una tienda de zapatillas Adidas donde los usuarios pueden ver productos, agregarlos al carrito y hacer pedidos. Los administradores pueden gestionar los productos, categorías y usuarios desde un panel especial.
+Este es mi proyecto de ecommerce para el curso. Simula una tienda de zapatillas, indumentaria y otros productos donde los usuarios pueden ver productos, agregarlos al carrito y hacer pedidos. Los administradores pueden gestionar los productos, categorías y usuarios desde un panel especial.
 
 ---
 
